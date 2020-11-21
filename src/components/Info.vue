@@ -16,11 +16,6 @@ export default {
       type: Object,
     },
   },
-  data() {
-    return {
-      open: false,
-    };
-  },
   mounted() {
     this.displayInfo();
   },
