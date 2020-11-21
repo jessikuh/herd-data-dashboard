@@ -13,36 +13,9 @@
     </template>
 
     <div class="mt-6 text-gray-500">
-      <div
-        class="px-4 py-2 flex text-xs uppercase"
-        v-if="activeItems.length > 0"
-      >
-        <div
-          v-for="({ name, shortName, description }) in activeItems"
-          :key="name"
-          class="w-44"
-        >
-          {{ name }}
+      <data-headers :data="activeHeaders" />
 
-          <info
-            :data="{
-              shortName,
-              description
-            }"
-          />
-        </div>
-      </div>
-
-      <div class="bg-white mt-2 px-4 py-4">
-        <ul class="border-b-2 flex pb-2">
-          <li
-            class="w-44"
-            v-for="(item, index) in activeData" :key="index"
-          >
-            {{ item ? item : 'N/A' }}
-          </li>
-        </ul>
-      </div>
+      <data-list :data="activeData" />
     </div>
   </div>
 </template>
@@ -51,13 +24,15 @@
 // eslint-disable-all
 import { fetchPageMeta, fetchItemMeta, fetchAnimalData } from '@/data';
 
-import Info from '@/components/Info.vue';
+import DataHeaders from '@/components/DataHeaders.vue';
+import DataList from '@/components/DataList.vue';
 import Tab from '@/components/Tab.vue';
 
 export default {
   name: 'Tabs',
   components: {
-    info: Info,
+    'data-headers': DataHeaders,
+    'data-list': DataList,
     'inner-tab': Tab,
   },
   data() {
@@ -78,7 +53,7 @@ export default {
 
       return null;
     },
-    activeItems() {
+    activeHeaders() {
       if (this.activePage) {
         const { items } = this.activePage;
 
@@ -89,8 +64,8 @@ export default {
       return false;
     },
     activeData() {
-      if (this.activeItems) {
-        return this.activeItems.map(({ shortName }) => {
+      if (this.activeHeaders) {
+        return this.activeHeaders.map(({ shortName }) => {
           const keys = Object.keys(this.animalData);
 
           if (keys.includes(shortName)) return this.animalData[shortName];
