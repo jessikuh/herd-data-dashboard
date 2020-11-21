@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-export default async function fetchAPI(path) {
+export default function fetchAPI(path) {
   const base = process.env.VUE_APP_SAMPLE_API;
   const lastChar = base.substr(-1);
   let fetchURL = `${base}/${path}`;

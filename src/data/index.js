@@ -1,13 +1,13 @@
 import fetchAPI from '@/utils/fetch';
 
-export async function fetchPageMeta() {
+export function fetchPageMeta() {
   return fetchAPI('page_meta.json');
 }
 
-export async function fetchItemMeta() {
+export function fetchItemMeta() {
   return fetchAPI('item_meta.json');
 }
 
-export async function fetchAnimalData() {
+export function fetchAnimalData() {
   return fetchAPI('animal_data.json');
 }
