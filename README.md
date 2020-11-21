@@ -1,4 +1,4 @@
-# Animal Data Dashboard
+# Herd Data Dashboard
 
 ## Requirements
 
