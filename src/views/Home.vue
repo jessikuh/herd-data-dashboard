@@ -187,6 +187,10 @@ export default {
       margin-left: 30px;
     }
 
+    &.active {
+      color: rgb(31,41,55);
+    }
+
     &.active,
     &:hover {
       &::after {
