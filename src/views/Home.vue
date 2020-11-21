@@ -20,27 +20,49 @@
 
     <button
       class="absolute bg-blue-400 hover:bg-blue-500 rounded right-0 top-2 py-1 px-2 text-white"
-      @click="showThreshold = !showThreshold"
+      @click="showMenu = !showMenu"
     >
-      Update Thresholds
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
 
-    <div class="threshold" v-if="showThreshold">
+    <div class="threshold" v-if="showMenu">
       <div class="absolute top-12 right-0 bg-white p-3 inline-block">
+        <p class="mb-1 text-lg">
+          <b>Thresholds</b>
+        </p>
+
         <div
           class="grid grid-cols-2 mb-2"
           v-for="({ shortName, name }, index) in thresholdAvailable" :key="index"
         >
-          <div>
+          <div class="text-sm">
             {{ name }}
           </div>
           <div>
             <input
-              class="bg-gray-100"
+              class="bg-gray-100 px-1"
               type="number"
               v-model="threshold[shortName]"
               placeholder="0"
-              @keydown.enter="showThreshold = !showThreshold"
+              @keydown.enter="showMenu = !showMenu"
+            >
+          </div>
+        </div>
+
+        <p class="mb-1 mt-4 text-lg">
+          <b>Configurations</b>
+        </p>
+        <div class="grid grid-cols-2">
+          <div class="text-sm">
+            Decimal places
+          </div>
+          <div>
+            <input
+              class="bg-gray-100 px-1"
+              type="number"
+              v-model="decimal"
+              placeholder="0"
+              @keydown.enter="showMenu = !showMenu"
             >
           </div>
         </div>
@@ -68,9 +90,10 @@ export default {
     return {
       active: 'Basic',
       animalData: null,
+      decimal: 3,
       itemMeta: null,
       pageMeta: null,
-      showThreshold: false,
+      showMenu: false,
       threshold: {},
     };
   },
@@ -102,10 +125,14 @@ export default {
           let list;
 
           if (keys.includes(shortName)) {
+            let value = this.animalData[shortName];
+
+            if (dataType === 'Decimal') value = value.toFixed(this.decimal);
+
             list = {
               shortName,
               dataType,
-              value: this.animalData[shortName],
+              value,
               threshold: this.threshold[shortName],
             };
           }
