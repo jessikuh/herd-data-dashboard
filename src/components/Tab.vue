@@ -1,7 +1,7 @@
 <template>
-  <div @click="$emit(title)">
+  <span @click="$emit('selected', title)">
     {{ title }}
-  </div>
+  </span>
 </template>
 
 <script>

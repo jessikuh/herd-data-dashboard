@@ -1,7 +1,6 @@
 <template>
   <div>
     <tabs />
-    Empty.
   </div>
 </template>
 

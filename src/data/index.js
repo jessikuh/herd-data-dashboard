@@ -9,5 +9,5 @@ export async function fetchItemMeta() {
 }
 
 export async function fetchAnimalData() {
-  return fetchAPI('animation_meta.json');
+  return fetchAPI('animal_data.json');
 }
