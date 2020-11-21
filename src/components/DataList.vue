@@ -7,7 +7,7 @@
         :key="index"
         :class="Number(threshold) && value > threshold ? 'text-red-400' : null"
       >
-        {{ value ? value : 'N/A' }}
+        {{ value ? value : 'Not provided' }}
       </li>
     </ul>
   </div>
