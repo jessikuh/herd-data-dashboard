@@ -1,29 +1,15 @@
-# bovisync-vue
+# Animal Data Dashboard
 
-## Project setup
-```
-yarn install
-```
+## Requirements
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+You will need [Node](https://nodejs.org/en/download/) installed on your machine.
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+## Instructions
 
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+1. Open your terminal and clone the code into a directory of your choice.
+2. From your terminal, `cd` into the created directory.
+3. Run `cp .env.example .env` to create your .env file.
+4. Run `vim .env` and add the sample data URL after 'VUE_APP_SAMPLE_API=' (i.e. `https://bovisync.bitbucket.io/sample_data`).
+5. Save and exit VIM.
+6. Run ```npm run start``` from the root directory.
+7. Once the dev server has compiled successfully, you can visit ```http://localhost:8080``` to explore the dashboard.
