@@ -1,37 +1,42 @@
 <template>
-  <div v-if="pageMeta && pageMeta.sections">
-    <ul class="border-b-4 border-opacity-100 cursor-pointer font-bold flex tabs text-sm">
-      <li
-        v-for="({ label }, index) in pageMeta.sections" :key="index"
-        class="hover:text-gray-800 py-2 relative text-gray-500 uppercase"
-        :class="active === label ? 'active' : null"
+  <div>
+    <div v-if="pageMeta && pageMeta.sections">
+      <ul class="border-b-4 border-opacity-100 cursor-pointer font-bold flex tabs text-sm">
+        <li
+          v-for="({ label }, index) in pageMeta.sections" :key="index"
+          class="hover:text-gray-800 py-2 relative text-gray-500 uppercase"
+          :class="active === label ? 'active' : null"
+        >
+          <inner-tab :title="label" @selected="changeTab" />
+        </li>
+      </ul>
+
+      <div class="mt-6 text-gray-500">
+        <data-headers :data="activeHeaders" />
+
+        <data-list :data="activeData" />
+      </div>
+
+      <button
+        class="absolute bg-blue-400 hover:bg-blue-500 rounded right-0 top-2 py-1 px-2 text-white"
+        @click="toggleConfigurations"
       >
-        <inner-tab :title="label" @selected="changeTab" />
-      </li>
-    </ul>
+        <cog-wheel />
+      </button>
 
-    <div class="mt-6 text-gray-500">
-      <data-headers :data="activeHeaders" />
-
-      <data-list :data="activeData" />
+      <div class="threshold" v-if="showPanel">
+        <configuration-panel
+          :data="thresholdAvailable"
+          :decimal-place="decimal"
+          :thresholds="thresholds"
+          @decimal-place="changeDecimal"
+          @close="showPanel = false"
+        />
+      </div>
     </div>
-
-    <button
-      class="absolute bg-blue-400 hover:bg-blue-500 rounded right-0 top-2 py-1 px-2 text-white"
-      @click="toggleConfigurations"
-    >
-      <cog-wheel />
-    </button>
-
-    <div class="threshold" v-if="showPanel">
-      <configuration-panel
-        :data="thresholdAvailable"
-        :decimal-place="decimal"
-        :thresholds="thresholds"
-        @decimal-place="changeDecimal"
-        @close="showPanel = false"
-      />
-    </div>
+    <template v-else>
+      Loading, please wait.
+    </template>
   </div>
 </template>
 
@@ -66,15 +71,6 @@ export default {
     };
   },
   computed: {
-    activePage() {
-      if (this.pageMeta && this.pageMeta.sections) {
-        const page = this.pageMeta.sections.find(({ label }) => label === this.active);
-
-        return page;
-      }
-
-      return null;
-    },
     activeHeaders() {
       if (this.activePage) {
         const { items } = this.activePage;
@@ -110,6 +106,15 @@ export default {
       }
 
       return false;
+    },
+    activePage() {
+      if (this.pageMeta && this.pageMeta.sections) {
+        const page = this.pageMeta.sections.find(({ label }) => label === this.active);
+
+        return page;
+      }
+
+      return null;
     },
     thresholdAvailable() {
       return this.itemMeta.filter((item) => item.dataType === 'Integer' || item.dataType === 'Decimal');
