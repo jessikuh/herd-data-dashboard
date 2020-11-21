@@ -38,6 +38,7 @@
           type="number"
           :value="decimal"
           placeholder="0"
+          @input="$emit('decimal-place', $event.target.value)"
           @change="$emit('decimal-place', $event.target.value)"
           @keydown.enter="$emit('close')"
         >
