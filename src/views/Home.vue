@@ -25,49 +25,14 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
 
-    <div class="threshold" v-if="showMenu">
-      <div class="absolute top-12 right-0 bg-white p-3 inline-block">
-        <p class="mb-1 text-lg">
-          <b>Thresholds</b>
-        </p>
-
-        <div
-          class="grid grid-cols-2 mb-2"
-          @click.stop
-          v-for="({ shortName, name }, index) in thresholdAvailable" :key="index"
-        >
-          <div class="text-sm">
-            {{ name }}
-          </div>
-          <div>
-            <input
-              class="bg-gray-100 px-1"
-              type="number"
-              v-model="threshold[shortName]"
-              placeholder="0"
-              @keydown.enter="showMenu = !showMenu"
-            >
-          </div>
-        </div>
-
-        <p class="mb-1 mt-4 text-lg">
-          <b>Configurations</b>
-        </p>
-        <div class="grid grid-cols-2" @click.stop>
-          <div class="text-sm">
-            Decimal places
-          </div>
-          <div>
-            <input
-              class="bg-gray-100 px-1"
-              type="number"
-              v-model="decimal"
-              placeholder="0"
-              @keydown.enter="showMenu = !showMenu"
-            >
-          </div>
-        </div>
-      </div>
+    <div class="threshold" v-if="showPanel">
+      <configuration-panel
+        :data="thresholdAvailable"
+        :decimal-place="decimal"
+        :thresholds="thresholds"
+        @decimal-place="changeDecimal"
+        @close="showPanel = false"
+      />
     </div>
   </div>
 </template>
@@ -76,13 +41,15 @@
 // eslint-disable-all
 import { fetchPageMeta, fetchItemMeta, fetchAnimalData } from '@/data';
 
+import ConfigurationPanel from '@/components/ConfigurationPanel.vue';
 import DataHeaders from '@/components/DataHeaders.vue';
 import DataList from '@/components/DataList.vue';
 import Tab from '@/components/Tab.vue';
 
 export default {
-  name: 'Tabs',
+  name: 'Home',
   components: {
+    'configuration-panel': ConfigurationPanel,
     'data-headers': DataHeaders,
     'data-list': DataList,
     'inner-tab': Tab,
@@ -94,8 +61,8 @@ export default {
       decimal: 3,
       itemMeta: null,
       pageMeta: null,
-      showMenu: false,
-      threshold: {},
+      showPanel: false,
+      thresholds: {},
     };
   },
   computed: {
@@ -134,7 +101,7 @@ export default {
               shortName,
               dataType,
               value,
-              threshold: this.threshold[shortName],
+              threshold: this.thresholds[shortName],
             };
           }
 
@@ -154,21 +121,24 @@ export default {
     this.pageMeta = await fetchPageMeta();
   },
   methods: {
+    changeDecimal(value) {
+      this.decimal = value;
+    },
     changeTab(title) {
       this.active = title;
     },
     toggleConfigurations(event) {
       event.stopPropagation();
 
-      this.showMenu = !this.showMenu;
+      this.showPanel = !this.showPanel;
 
-      if (this.showMenu) {
+      if (this.showPanel) {
         window.addEventListener('click', () => {
-          this.showMenu = false;
+          this.showPanel = false;
         });
       } else {
         window.removeEventListener('click', () => {
-          this.showMenu = false;
+          this.showPanel = false;
         });
       }
     },
