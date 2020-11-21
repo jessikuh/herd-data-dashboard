@@ -17,7 +17,7 @@ export default {
   name: 'DataList',
   props: {
     data: {
-      type: Object,
+      type: [Array, Boolean],
       required: true,
     },
   },
