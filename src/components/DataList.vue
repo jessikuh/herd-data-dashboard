@@ -5,7 +5,7 @@
         class="w-64"
         v-for="({ value, threshold }, index) in data"
         :key="index"
-        :class="value > threshold ? 'text-red-400' : null"
+        :class="Number(threshold) && value > threshold ? 'text-red-400' : null"
       >
         {{ value ? value : 'N/A' }}
       </li>
