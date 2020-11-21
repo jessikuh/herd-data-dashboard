@@ -3,10 +3,11 @@
     <ul class="border-b-2 flex pb-2">
       <li
         class="w-64"
-        v-for="(item, index) in data"
+        v-for="({ value, threshold }, index) in data"
         :key="index"
+        :class="value > threshold ? 'text-red-400' : null"
       >
-        {{ item ? item : 'N/A' }}
+        {{ value ? value : 'N/A' }}
       </li>
     </ul>
   </div>
